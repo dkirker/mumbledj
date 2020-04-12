@@ -14,7 +14,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 	"go.reik.pl/mumbledj/assets"
 	"go.reik.pl/mumbledj/bot"
 	"go.reik.pl/mumbledj/commands"
@@ -54,69 +54,80 @@ func main() {
 	app.Usage = "A Mumble bot that plays audio from various media sites."
 	app.Version = DJ.Version
 	app.Flags = []cli.Flag{
-		cli.StringFlag{
-			Name:  "config, c",
-			Value: os.ExpandEnv("$HOME/.config/mumbledj/config.yaml"),
-			Usage: "location of MumbleDJ configuration file",
+		&cli.StringFlag{
+			Name:    "config",
+			Aliases: []string{"c"},
+			Value:   os.ExpandEnv("$HOME/.config/mumbledj/config.yaml"),
+			Usage:   "location of MumbleDJ configuration file",
 		},
-		cli.StringFlag{
-			Name:  "server, s",
-			Value: "127.0.0.1",
-			Usage: "address of Mumble server to connect to",
+		&cli.StringFlag{
+			Name:    "server",
+			Aliases: []string{"s"},
+			Value:   "127.0.0.1",
+			Usage:   "address of Mumble server to connect to",
 		},
-		cli.StringFlag{
-			Name:  "port, o",
-			Value: "64738",
-			Usage: "port of Mumble server to connect to",
+		&cli.StringFlag{
+			Name:    "port",
+			Aliases: []string{"o"},
+			Value:   "64738",
+			Usage:   "port of Mumble server to connect to",
 		},
-		cli.StringFlag{
-			Name:  "username, u",
-			Value: "MumbleDJ",
-			Usage: "username for the bot",
+		&cli.StringFlag{
+			Name:    "username",
+			Aliases: []string{"u"},
+			Value:   "MumbleDJ",
+			Usage:   "username for the bot",
 		},
-		cli.StringFlag{
-			Name:  "password, p",
-			Value: "",
-			Usage: "password for the Mumble server",
+		&cli.StringFlag{
+			Name:    "password",
+			Aliases: []string{"p"},
+			Value:   "",
+			Usage:   "password for the Mumble server",
 		},
-		cli.StringFlag{
-			Name:  "channel, n",
-			Value: "",
-			Usage: "channel the bot enters after connecting to the Mumble server",
+		&cli.StringFlag{
+			Name:    "channel",
+			Aliases: []string{"n"},
+			Value:   "",
+			Usage:   "channel the bot enters after connecting to the Mumble server",
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:  "p12",
 			Value: "",
 			Usage: "path to user p12 file for authenticating as a registered user",
 		},
-		cli.StringFlag{
-			Name:  "cert, e",
-			Value: "",
-			Usage: "path to PEM certificate",
+		&cli.StringFlag{
+			Name:    "cert",
+			Aliases: []string{"e"},
+			Value:   "",
+			Usage:   "path to PEM certificate",
 		},
-		cli.StringFlag{
-			Name:  "key, k",
-			Value: "",
-			Usage: "path to PEM key",
+		&cli.StringFlag{
+			Name:    "key",
+			Aliases: []string{"k"},
+			Value:   "",
+			Usage:   "path to PEM key",
 		},
-		cli.StringFlag{
-			Name:  "accesstokens, a",
-			Value: "",
-			Usage: "list of access tokens separated by spaces",
+		&cli.StringFlag{
+			Name:    "accesstokens",
+			Aliases: []string{"a"},
+			Value:   "",
+			Usage:   "list of access tokens separated by spaces",
 		},
-		cli.BoolFlag{
-			Name:  "insecure, i",
-			Usage: "if present, the bot will not check Mumble certs for consistency",
+		&cli.BoolFlag{
+			Name:    "insecure",
+			Aliases: []string{"i"},
+			Usage:   "if present, the bot will not check Mumble certs for consistency",
 		},
-		cli.BoolFlag{
-			Name:  "debug, d",
-			Usage: "if present, all debug messages will be shown",
+		&cli.BoolFlag{
+			Name:    "debug",
+			Aliases: []string{"d"},
+			Usage:   "if present, all debug messages will be shown",
 		},
 	}
 
 	hiddenFlags := make([]cli.Flag, len(viper.AllKeys()))
 	for i, configValue := range viper.AllKeys() {
-		hiddenFlags[i] = cli.StringFlag{
+		hiddenFlags[i] = &cli.StringFlag{
 			Name:   configValue,
 			Hidden: true,
 		}
@@ -133,7 +144,7 @@ func main() {
 		}
 
 		for _, configValue := range viper.AllKeys() {
-			if c.GlobalIsSet(configValue) {
+			if c.IsSet(configValue) {
 				if strings.Contains(c.String(configValue), ",") {
 					viper.Set(configValue, strings.Split(c.String(configValue), ","))
 				} else {
@@ -164,34 +175,34 @@ func main() {
 			viper.WatchConfig()
 		}
 
-		if c.GlobalIsSet("server") {
+		if c.IsSet("server") {
 			viper.Set("connection.address", c.String("server"))
 		}
-		if c.GlobalIsSet("port") {
+		if c.IsSet("port") {
 			viper.Set("connection.port", c.String("port"))
 		}
-		if c.GlobalIsSet("username") {
+		if c.IsSet("username") {
 			viper.Set("connection.username", c.String("username"))
 		}
-		if c.GlobalIsSet("password") {
+		if c.IsSet("password") {
 			viper.Set("connection.password", c.String("password"))
 		}
-		if c.GlobalIsSet("channel") {
+		if c.IsSet("channel") {
 			viper.Set("defaults.channel", c.String("channel"))
 		}
-		if c.GlobalIsSet("p12") {
+		if c.IsSet("p12") {
 			viper.Set("connection.user_p12", c.String("p12"))
 		}
-		if c.GlobalIsSet("cert") {
+		if c.IsSet("cert") {
 			viper.Set("connection.cert", c.String("cert"))
 		}
-		if c.GlobalIsSet("key") {
+		if c.IsSet("key") {
 			viper.Set("connection.key", c.String("key"))
 		}
-		if c.GlobalIsSet("accesstokens") {
+		if c.IsSet("accesstokens") {
 			viper.Set("connection.access_tokens", c.String("accesstokens"))
 		}
-		if c.GlobalIsSet("insecure") {
+		if c.IsSet("insecure") {
 			viper.Set("connection.insecure", c.Bool("insecure"))
 		}
 

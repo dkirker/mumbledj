@@ -311,7 +311,6 @@ Keep in mind that values that contain commas (such as `"SuperUser,Matt"`) will b
 * __Admin-only by default__: No
 * __Example__: `!oh wololo 10`
 
-
 ### pause
 * __Description__: Pauses audio playback.
 * __Default Aliases__: pause
@@ -346,6 +345,13 @@ Keep in mind that values that contain commas (such as `"SuperUser,Matt"`) will b
 * __Arguments__: None
 * __Admin-only by default__: No
 * __Example__: `!pause`
+
+### search:
+* __Description__: Search for track and add it to the queue.
+* __Default Aliases__: search, se
+* __Arguments__: Search query for search engine
+* __Admin-only by default__: No
+* __Example__: `!search techno union`
 
 ### setcomment
 * __Description__: Sets the comment displayed next to MumbleDJ's username in Mumble. If the argument is left empty, the current comment is removed.

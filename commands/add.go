@@ -10,7 +10,6 @@ package commands
 import (
 	"errors"
 	"fmt"
-	"sync"
 
 	"github.com/spf13/viper"
 	"go.reik.pl/mumbledj/interfaces"

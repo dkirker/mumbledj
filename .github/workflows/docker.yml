@@ -5,6 +5,8 @@ on:
       - '**'
     tags:
       - 'v*'
+  schedule:
+    - cron: '47 11 * * 0'
 jobs:
   push_to_registry:
     name: Build and push docker image

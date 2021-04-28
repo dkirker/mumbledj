@@ -1,5 +1,5 @@
 # Build environment for mumbledj - golang alpine container
-FROM golang:1.14-alpine AS builder
+FROM golang:1.16-alpine AS builder
 ARG branch=master
 
 ENV GO111MODULE=on

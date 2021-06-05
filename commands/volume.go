@@ -50,12 +50,12 @@ func (c *VolumeCommand) Execute(user *gumble.User, args ...string) (string, bool
 		return fmt.Sprintf(viper.GetString("commands.volume.messages.current_volume"), DJ.Volume), true, nil
 	}
 
-	newVolume, err := strconv.ParseFloat(args[0], 32)
+	newVolume, err := strconv.ParseFloat(args[0], 64)
 	if err != nil {
 		return "", true, errors.New(viper.GetString("commands.volume.messages.parsing_error"))
 	}
 
-	if newVolume <= viper.GetFloat64("volume.lowest") || newVolume >= viper.GetFloat64("volume.highest") {
+	if newVolume < viper.GetFloat64("volume.lowest") || newVolume > viper.GetFloat64("volume.highest") {
 		return "", true, fmt.Errorf(viper.GetString("commands.volume.messages.out_of_range_error"),
 			viper.GetFloat64("volume.lowest"), viper.GetFloat64("volume.highest"))
 	}

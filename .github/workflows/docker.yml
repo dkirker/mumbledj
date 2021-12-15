@@ -15,8 +15,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Docker meta
-        id: docker_meta
+      - name: Docker meta (master)
+        if: ${{ github.ref == 'refs/heads/master' }} 
+        id: docker_meta_master
         uses: docker/metadata-action@v3
         with:
           images: ${{ secrets.DOCKERHUB_USERNAME }}/mumbledj,ghcr.io/${{ github.repository_owner }}/mumbledj
@@ -26,6 +27,14 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
           flavor: |
             latest=true
+      - name: Docker meta
+        if: ${{ github.ref != 'refs/heads/master' }} 
+        id: docker_meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/mumbledj,ghcr.io/${{ github.repository_owner }}/mumbledj
+          tags: |
+            type=ref,event=branch
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set up QEMU

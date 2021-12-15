@@ -75,11 +75,21 @@ func PerformStartupChecks() {
 
 func checkYouTubeDLInstallation() error {
 	logrus.Infoln("Checking YouTubeDL installation...")
-	command := exec.Command("youtube-dl", "--version")
-	if err := command.Run(); err != nil {
+	command := exec.Command("yt-dlp", "--version")
+	if version, err := command.CombinedOutput(); err == nil {
+		logrus.Infof("Using yt-dlp version %s", version)
+		DJ.YouTubeDL.command = "yt-dlp"
+		return nil
+	}
+
+	command = exec.Command("youtube-dl", "--version")
+	if version, err := command.CombinedOutput(); err == nil {
+		logrus.Infof("Using youtube-dl version %s", version)
+		DJ.YouTubeDL.command = "youtube-dl"
+		return nil
+	} else {
 		return errors.New("youtube-dl is not properly installed")
 	}
-	return nil
 }
 
 func checkFfmpegInstallation() error {

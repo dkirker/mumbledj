@@ -23,6 +23,7 @@ import (
 // youtube-dl: https://rg3.github.io/youtube-dl/
 type YouTubeDL struct {
 	mutex sync.Mutex
+	command string
 }
 
 // Download downloads the audio associated with the incoming `track` object
@@ -50,9 +51,9 @@ func (yt *YouTubeDL) Download(t interfaces.Track) error {
 	if _, err := os.Stat(filepath); os.IsNotExist(err) {
 		var cmd *exec.Cmd
 		if t.GetService() == "Mixcloud" {
-			cmd = exec.Command("youtube-dl", "--verbose", "--no-mtime", "--output", filepath, "--format", format, "--external-downloader", "aria2c", player, t.GetURL())
+			cmd = exec.Command(yt.command, "--verbose", "--no-mtime", "--output", filepath, "--format", format, "--external-downloader", "aria2c", player, t.GetURL())
 		} else {
-			cmd = exec.Command("youtube-dl", "--verbose", "--no-mtime", "--output", filepath, "--format", format, player, t.GetURL())
+			cmd = exec.Command(yt.command, "--verbose", "--no-mtime", "--output", filepath, "--format", format, player, t.GetURL())
 		}
 		output, err := cmd.CombinedOutput()
 		if err != nil {
@@ -60,7 +61,7 @@ func (yt *YouTubeDL) Download(t interfaces.Track) error {
 			for s := range cmd.Args {
 				args += cmd.Args[s] + " "
 			}
-			logrus.Warnf("%s\n%s\nyoutube-dl: %s", args, string(output), err.Error())
+			logrus.Warnf("%s\n%s\n%s: %s", args, string(output), yt.command, err.Error())
 			return errors.New("Track download failed")
 		}
 

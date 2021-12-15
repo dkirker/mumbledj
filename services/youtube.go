@@ -63,11 +63,11 @@ func NewYouTubeService() *YouTube {
 			ReadableName: "YouTube",
 			Format:       "bestaudio",
 			TrackRegex: []*regexp.Regexp{
-				regexp.MustCompile(`https?:\/\/www.youtube.com\/watch\?v=(?P<id>[\w-]+)(?P<timestamp>\&t=\d*m?\d*s?)?`),
-				regexp.MustCompile(`https?:\/\/youtube.com\/watch\?v=(?P<id>[\w-]+)(?P<timestamp>\&t=\d*m?\d*s?)?`),
-				regexp.MustCompile(`https?:\/\/youtu.be\/(?P<id>[\w-]+)(\?t=(?P<timestamp>\d*m?\d*s?))?`),
-				regexp.MustCompile(`https?:\/\/youtube.com\/v\/(?P<id>[\w-]+)(?P<timestamp>\?t=\d*m?\d*s?)?`),
-				regexp.MustCompile(`https?:\/\/www.youtube.com\/v\/(?P<id>[\w-]+)(?P<timestamp>\?t=\d*m?\d*s?)?`),
+				regexp.MustCompile(`https?:\/\/www\.youtube\.com\/watch\?v=(?P<id>[\w-]+)(?P<timestamp>\&t=\d*m?\d*s?)?`),
+				regexp.MustCompile(`https?:\/\/youtube\.com\/watch\?v=(?P<id>[\w-]+)(?P<timestamp>\&t=\d*m?\d*s?)?`),
+				regexp.MustCompile(`https?:\/\/youtu\.be\/(?P<id>[\w-]+)(\?t=(?P<timestamp>\d*m?\d*s?))?`),
+				regexp.MustCompile(`https?:\/\/youtube\.com\/v\/(?P<id>[\w-]+)(?P<timestamp>\?t=\d*m?\d*s?)?`),
+				regexp.MustCompile(`https?:\/\/www\.youtube\.com\/v\/(?P<id>[\w-]+)(?P<timestamp>\?t=\d*m?\d*s?)?`),
 			},
 			PlaylistRegex: []*regexp.Regexp{
 				regexp.MustCompile(`https?:\/\/www\.youtube\.com\/playlist\?list=(?P<id>[\w-]+)`),

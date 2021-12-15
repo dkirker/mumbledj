@@ -16,7 +16,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Docker meta (master)
-        if: ${{ github.ref == 'refs/heads/master' }} 
+        if: ${{ github.ref_type == 'tag' || github.ref == 'refs/heads/master' }} 
         id: docker_meta_master
         uses: docker/metadata-action@v3
         with:
@@ -28,7 +28,7 @@ jobs:
           flavor: |
             latest=true
       - name: Docker meta
-        if: ${{ github.ref != 'refs/heads/master' }} 
+        if: ${{ github.ref_type == 'branch' && github.ref != 'refs/heads/master' }} 
         id: docker_meta
         uses: docker/metadata-action@v3
         with:

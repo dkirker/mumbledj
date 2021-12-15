@@ -4,7 +4,7 @@ ARG branch=master
 
 ENV GO111MODULE=on
 
-RUN apk add --update ca-certificates make git build-base opus-dev
+RUN apk add --no-cache ca-certificates make git build-base opus-dev
 COPY . $GOPATH/src/go.reik.pl/mumbledj
 
 # add assets, which will be bundled with binary
@@ -15,7 +15,7 @@ RUN make && make install
 
 # Export binary only from builder environment
 FROM alpine:latest
-RUN apk add --update ffmpeg openssl aria2 python3 && \
+RUN apk add --no-cache ffmpeg openssl aria2 python3 && \
     # youtube-dl use /usr/bin/env python so we need to create symlink
     ln -s /usr/bin/python3 /usr/bin/python && \
     wget https://yt-dl.org/downloads/latest/youtube-dl -O /bin/youtube-dl && \

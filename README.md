@@ -37,8 +37,8 @@
 
 ### Requirements
 **All MumbleDJ installations must also have the following installed:**
-* [`youtube-dl`](https://rg3.github.io/youtube-dl/download.html)
-* [`ffmpeg`](https://ffmpeg.org) OR [`avconv`](https://libav.org)
+* [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) (alternatively, [`youtube-dl`](https://rg3.github.io/youtube-dl/download.html) works but infrequent updates mean it may not be able to play all videos)
+* [`ffmpeg`](https://ffmpeg.org)
 * [`aria2`](https://aria2.github.io/) if you plan on using services that throttle download speeds (like Mixcloud)
 * [`openssl`](https://www.openssl.org/) if you plan using p12 certificates for authentication
 
@@ -94,32 +94,24 @@ After verifying that the [requirements](#requirements) are installed, simply vis
 
 
 ### Docker
-
 You can also use [Docker](https://www.docker.com) to run MumbleDJ.
 
-First you need to clone the MumbleDJ repository to your machine:
+Assuming you have [Docker installed](https://www.docker.com/products/docker), you can run it like this, passing the configuration through the command line:
 ```
-git clone https://github.com/reikion/mumbledj
-```
-
-Assuming you have [Docker installed](https://www.docker.com/products/docker), you will have to build the image:
-```
-docker build -t mumbledj .
-```
-
-And then you can run it, passing the configuration through the command line:
-```
-docker run --rm --name=mumbledj mumbledj --server=SERVER --api_keys.youtube=YOUR_YOUTUBE_API_KEY --api_keys.soundcloud=YOUR_SOUNDCLOUD_API_KEY
+docker run --rm --name=mumbledj ghcr.io/leoverto/mumbledj --server=SERVER --api_keys.youtube=YOUR_YOUTUBE_API_KEY --api_keys.soundcloud=YOUR_SOUNDCLOUD_API_KEY
 ```
 
 In order to run the process as a daemon and restart it automatically on reboot you can use:
 ```
-docker run -d --restart=unless-stopped --name=mumbledj mumbledj --server=SERVER --api_keys.youtube=YOUR_YOUTUBE_API_KEY --api_keys.soundcloud=YOUR_SOUNDCLOUD_API_KEY
+docker run -d --restart=unless-stopped --name=mumbledj ghcr.io/leoverto/mumbledj --server=SERVER --api_keys.youtube=YOUR_YOUTUBE_API_KEY --api_keys.soundcloud=YOUR_SOUNDCLOUD_API_KEY
 ```
+
+
 ## Default config
 You can embed your config.yaml into binary if you plan to compile Mumbledj from source. Please note that everybody, who can open Mumbledj
 binary in text editor can also read your API secrets!
 To embed default config copy `assets/config.yaml.example` to `assets/assets/config.yaml` and customize as needed.
+
 
 ## Sample player
 MumbleDJ allows to play random flac samples from given category embedded in binary and from filesystem.
@@ -172,24 +164,26 @@ USAGE:
    mumbledj [global options] command [command options] [arguments...]
 
 VERSION:
-   v3.4.1
+   v3.7.0
 
 COMMANDS:
+   help, h  Shows a list of commands or help for one command
+
 GLOBAL OPTIONS:
-   --config value, -c value		location of MumbleDJ configuration file (default: "$HOME/.config/mumbledj/config.yaml")
-   --server value, -s value		address of Mumble server to connect to (default: "127.0.0.1")
-   --port value, -o value		port of Mumble server to connect to (default: "64738")
-   --username value, -u value		username for the bot (default: "MumbleDJ")
-   --password value, -p value		password for the Mumble server
-   --channel value, -n value		channel the bot enters after connecting to the Mumble server
-   --p12 value				path to user p12 file for authenticating as a registered user
-   --cert value, -e value		path to PEM certificate
-   --key value, -k value		path to PEM key
-   --accesstokens value, -a value	list of access tokens separated by spaces
-   --insecure, -i			if present, the bot will not check Mumble certs for consistency
-   --debug, -d				if present, all debug messages will be shown
-   --help, -h				show help
-   --version, -v			print the version
+   --config value, -c value        location of MumbleDJ configuration file (default: "/home/mumbledj/.config/mumbledj/config.yaml")
+   --server value, -s value        address of Mumble server to connect to (default: "127.0.0.1")
+   --port value, -o value          port of Mumble server to connect to (default: "64738")
+   --username value, -u value      username for the bot (default: "MumbleDJ")
+   --password value, -p value      password for the Mumble server
+   --channel value, -n value       channel the bot enters after connecting to the Mumble server
+   --p12 value                     path to user p12 file for authenticating as a registered user
+   --cert value, -e value          path to PEM certificate
+   --key value, -k value           path to PEM key
+   --accesstokens value, -a value  list of access tokens separated by spaces
+   --insecure, -i                  if present, the bot will not check Mumble certs for consistency (default: false)
+   --debug, -d                     if present, all debug messages will be shown (default: false)
+   --help, -h                      show help (default: false)
+   --version, -v                   print the version (default: false)
 
 ```
 
@@ -200,6 +194,7 @@ mumbledj --admins.names="SuperUser,Matt" --volume.default="0.5" --volume.lowest=
 ```
 
 Keep in mind that values that contain commas (such as `"SuperUser,Matt"`) will be interpreted as string slices, or arrays if you are not familiar with Go. If you want your value to be interpreted as a normal string, it is best to avoid commas for now.
+
 
 ## Commands
 

@@ -1,6 +1,15 @@
 MumbleDJ Changelog
 ==================
 
+### December 15, 2021 -- `v3.7.0`
+* As [youtube-dl](https://github.com/ytdl-org/youtube-dl) is effectively unmaintained, MumbleDJ can now use [yt-dlp](https://github.com/yt-dlp/yt-dlp) instead.
+* Updated the docker image to use `yt-dlp`.
+* Fixed a potential issue with the URL matching for youtube domains.
+* Updated dependencies.
+
+### June 16. 2021 -- `v3.6.1`
+* Fixed float comparison for volume
+
 ### November 5, 2016 -- `v3.2.1`
 * Fixed YouTube video offsets. Now YouTube URLs with `?t=<timestamp>` at the end will start the audio playback at the appropriate position.
 

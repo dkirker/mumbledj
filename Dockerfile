@@ -15,11 +15,7 @@ RUN make && make install
 
 # Export binary only from builder environment
 FROM alpine:latest
-RUN apk add --no-cache ffmpeg openssl aria2 python3 && \
-    # youtube-dl use /usr/bin/env python so we need to create symlink
-    ln -s /usr/bin/python3 /usr/bin/python && \
-    wget https://yt-dl.org/downloads/latest/youtube-dl -O /bin/youtube-dl && \
-    chmod a+x /bin/youtube-dl
+RUN apk add --no-cache ffmpeg openssl aria2 yt-dlp
 COPY --from=builder /usr/local/bin/mumbledj /usr/local/bin/mumbledj
 
 # Drop to user level privileges

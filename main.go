@@ -10,6 +10,7 @@ package main
 import (
 	"io/ioutil"
 	"os"
+	"fmt"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -217,6 +218,30 @@ func main() {
 			DJ.Client.Do(func() {
 				DJ.Client.Self.Move(DJ.Client.Channels.Find(defaultChannel...))
 			})
+		}
+
+		if viper.GetString("defaults.command_on_start") != "" {
+			commandOnStart := viper.GetString("defaults.command_on_start")
+
+			if commandOnStart[0] == viper.GetString("commands.prefix")[0] &&
+				commandOnStart != viper.GetString("commands.prefix") {
+				go func() {
+					message, _, err := DJ.FindAndExecuteCommand(DJ.Client.Self, commandOnStart[1:])
+					if err != nil {
+						logrus.WithFields(logrus.Fields{
+							"channel": DJ.Client.Self.Channel.Name,
+							"message": err.Error(),
+						}).Warnln("Sending an error message...")
+						DJ.Client.Self.Channel.Send(fmt.Sprintf("<b>Error:</b> %s", err.Error()), false)
+					} else {
+						logrus.WithFields(logrus.Fields{
+							"channel": DJ.Client.Self.Channel.Name,
+							"message": message,
+						}).Infoln("Sending a channel message...")
+						DJ.Client.Self.Channel.Send(message, false)
+					}
+				}()
+			}
 		}
 
 		DJ.Client.Do(func() {

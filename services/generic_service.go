@@ -20,9 +20,11 @@ import (
 // GenericService is a generic struct that should be embedded
 // in other service structs, as it provides useful helper
 // methods and properties.
+// Source: youtube-dl, download, file, stream
 type GenericService struct {
 	ReadableName  string
 	Format        string
+	MediaSource   string
 	TrackRegex    []*regexp.Regexp
 	PlaylistRegex []*regexp.Regexp
 }
@@ -35,6 +37,11 @@ func (gs *GenericService) GetReadableName() string {
 // GetFormat returns the youtube-dl format for the service.
 func (gs *GenericService) GetFormat() string {
 	return gs.Format
+}
+
+// GetMediaSource returns the method that the media should be obtained with
+func (gs *GenericService) GetMediaSource() string {
+	return gs.MediaSource
 }
 
 // CheckURL matches the passed URL with a list of regex patterns

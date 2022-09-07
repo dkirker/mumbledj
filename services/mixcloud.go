@@ -32,6 +32,7 @@ func NewMixcloudService() *Mixcloud {
 		&GenericService{
 			ReadableName: "Mixcloud",
 			Format:       "m4a",
+			MediaSource:  "youtube-dl",
 			TrackRegex: []*regexp.Regexp{
 				regexp.MustCompile(`https?:\/\/(www\.)?mixcloud\.com\/([\w-]+)\/([\w-]+)(#t=\n\n?(:\n\n)*)?`),
 			},

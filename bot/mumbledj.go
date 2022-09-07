@@ -309,6 +309,15 @@ func (dj *MumbleDJ) GetService(url string) (interfaces.Service, error) {
 	return nil, errors.New("The provided URL does not match an enabled service")
 }
 
+func (dj *MumbleDJ) GetServiceByName(name string) (interfaces.Service, error) {
+	for _, service := range dj.AvailableServices {
+		if service.GetReadableName() == name {
+			return service, nil
+		}
+	}
+	return nil, errors.New("The provided name does not match an enabled service")
+}
+
 func (dj *MumbleDJ) findCommand(message string) (interfaces.Command, error) {
 	var possibleCommand string
 	if strings.Contains(message, " ") {

@@ -165,14 +165,27 @@ func (p *Player) playCurrent() error {
 	}
 
 	// Download track
-	filepath := os.ExpandEnv(viper.GetString("cache.directory") + "/" + currentTrack.GetFilename())
-	if _, err := os.Stat(filepath); os.IsNotExist(err) {
-		if err := DJ.YouTubeDL.Download(currentTrack); err != nil {
-			// Youtube-dl couldn't download track, proceed to next track in queue
-			message := fmt.Sprintf("<b>Error:</b> Download of %s track failed, skipping...", currentTrack.GetURL())
-			DJ.Client.Self.Channel.Send(message, false)
-			DJ.Queue.RemoveTrack(0)
-			return err
+	mediaSource := "youtube-dl"
+	service, _ := DJ.GetServiceByName(currentTrack.GetService())
+	if service != nil {
+		mediaSource = service.GetMediaSource()
+	}
+
+	filepath := ""
+	if mediaSource == "file" {
+		filepath = currentTrack.GetFilename()
+	} else if mediaSource == "stream" {
+		filepath = currentTrack.GetURL()
+	} else if mediaSource == "youtube-dl" || mediaSource == "download" {
+		filepath = os.ExpandEnv(viper.GetString("cache.directory") + "/" + currentTrack.GetFilename())
+		if _, err := os.Stat(filepath); os.IsNotExist(err) {
+			if err := DJ.YouTubeDL.Download(currentTrack); err != nil {
+				// Youtube-dl couldn't download track, proceed to next track in queue
+				message := fmt.Sprintf("<b>Error:</b> Download of %s track failed, skipping...", currentTrack.GetURL())
+				DJ.Client.Self.Channel.Send(message, false)
+				DJ.Queue.RemoveTrack(0)
+				return err
+			}
 		}
 	}
 

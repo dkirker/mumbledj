@@ -27,6 +27,7 @@ func SetDefaultConfig() {
 	viper.SetDefault("defaults.comment", "Hello! I am a bot. Type !help for a list of commands.")
 	viper.SetDefault("defaults.channel", "")
 	viper.SetDefault("defaults.player_command", "ffmpeg")
+	viper.SetDefault("defaults.command_on_start", "")
 
 	// Queue defaults.
 	viper.SetDefault("queue.track_skip_ratio", 0.5)

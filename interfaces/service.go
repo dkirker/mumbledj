@@ -14,6 +14,7 @@ import "layeh.com/gumble/gumble"
 type Service interface {
 	GetReadableName() string
 	GetFormat() string
+	GetMediaSource() string
 	CheckAPIKey() error
 	CheckURL(string) bool
 	// GetTracks should for given url return list of tracks, nil or nil, error message

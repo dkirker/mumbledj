@@ -23,5 +23,6 @@ func init() {
 		NewMixcloudService(),
 		NewSoundCloudService(),
 		NewYouTubeService(),
+		NewIcecastService(),
 	}
 }

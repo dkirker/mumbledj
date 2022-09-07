@@ -35,6 +35,7 @@ func NewSoundCloudService() *SoundCloud {
 		&GenericService{
 			ReadableName: "SoundCloud",
 			Format:       "bestaudio",
+			MediaSource:  "youtube-dl",
 			TrackRegex: []*regexp.Regexp{
 				regexp.MustCompile(`https?:\/\/(www\.)?soundcloud\.com\/([\w-]+)\/([\w-]+)(#t=\n\n?(:\n\n)*)?`),
 			},
